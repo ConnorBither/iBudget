@@ -9,6 +9,10 @@ function HomePage() {
       <Link to="/login" className="login-button">
         Go to Login Page
       </Link>
+      <br />
+      <Link to="/register" className="register-button">
+        Register New Account
+      </Link>
     </div>
   );
 }

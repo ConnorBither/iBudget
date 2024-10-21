@@ -6,7 +6,6 @@ function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -15,10 +14,13 @@ function LoginPage() {
         username,
         password,
       });
-      setMessage(response.data);
-      if (response.status === 200) {
-        navigate('/user-home');
-      }
+
+      // Store the username in local storage or state
+      localStorage.setItem('username', response.data.username);
+
+      // Navigate to the user's home page
+      setMessage(response.data.message);
+      navigate('/user-home');
     } catch (error) {
       setMessage('Invalid credentials');
     }

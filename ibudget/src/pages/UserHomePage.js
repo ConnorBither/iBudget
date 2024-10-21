@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function UserHomePage() {
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    // Retrieve the username from localStorage (assuming it's stored there after login)
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
   return (
     <div>
-      <h1>User's Home Page</h1>
+      <h1>Welcome, {username}</h1>  {/* Personalized welcome message */}
       <div>
         <Link to="/enter-purchases">
           <button>Enter New Purchases</button>

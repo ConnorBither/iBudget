@@ -8,6 +8,7 @@ import ReviewPurchases from './pages/ReviewPurchases';
 import Recommendations from './pages/Recommendations';
 import Settings from './pages/Settings';
 import NewPurchases from './pages/NewPurchases';
+import Register from './pages/Register';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/recommendations" element={<Recommendations />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/new-purchases" element={<NewPurchases />} />
+          <Route path="/register" element={<Register />} />
           {/* Catch-all route for any undefined paths */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
