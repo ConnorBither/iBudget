@@ -90,6 +90,67 @@ app.post('/login', async (req, res) => {
   }
 });
 
+app.post('/add-purchase', async (req, res) => {
+  const { username, storeName, itemName, price, quantity, category } = req.body;
+
+  if (!username || !storeName || !itemName || !price || !quantity || !category) {
+    return res.status(400).send('All fields are required');
+  }
+
+  const params = {
+    TableName: 'Purchases',
+    Item: {
+      purchaseId: new Date().getTime().toString(),  // Unique ID for each purchase
+      username: username,
+      storeName: storeName,
+      itemName: itemName,
+      price: price,
+      quantity: quantity,
+      category: category,
+      purchaseDate: new Date().toISOString(),
+    },
+  };
+
+  // Save purchase to DynamoDB
+  try {
+    await dynamoDB.put(params).promise();
+    res.status(201).send('Purchase added successfully');
+  } catch (error) {
+    console.error('Error adding purchase:', error);
+    res.status(500).send('Error adding purchase');
+  }
+});
+
+// Retrieve purchases for user with pagination
+app.get('/purchases', async (req, res) => {
+  const { username, limit = 100, lastKey } = req.query;
+
+  if (!username) {
+    return res.status(400).send('Username is required');
+  }
+
+  const params = {
+    TableName: 'Purchases',
+    KeyConditionExpression: 'username = :username',
+    ExpressionAttributeValues: {
+      ':username': username,
+    },
+    Limit: parseInt(limit),
+    ExclusiveStartKey: lastKey ? JSON.parse(lastKey) : undefined, // Handle pagination
+  };
+
+  try {
+    const result = await dynamoDB.query(params).promise();
+    res.status(200).send({
+      purchases: result.Items,
+      lastKey: result.LastEvaluatedKey ? JSON.stringify(result.LastEvaluatedKey) : null,
+    });
+  } catch (error) {
+    console.error('Error fetching purchases:', error);
+    res.status(500).send('Error fetching purchases');
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
