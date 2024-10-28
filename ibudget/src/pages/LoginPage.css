@@ -1,0 +1,83 @@
+.login-page {
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .top-bar {
+    background-color: #d3d3d3;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo-container .logo {
+    height: 30px;
+  }
+  
+  .home-button {
+    background-color: #555555;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .main-content {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    padding: 20px;
+  }
+  
+  .sign-in-title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 5px;
+    margin-bottom: 30px; /* Add vertical space below title */
+  }
+  
+  .input-field {
+    padding: 10px;
+    margin-top: 20px; /* Increase vertical spacing */
+    width: 300px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  
+  .sign-in-button {
+    margin-top: 30px; /* Increase spacing above the button */
+    background-color: #007bff;
+    color: black;
+    padding: 10px 40px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .message {
+    margin-top: 10px;
+  }
+  
+  .signup-text {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .signup-link {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .signup-link:hover {
+    text-decoration: underline;
+  }

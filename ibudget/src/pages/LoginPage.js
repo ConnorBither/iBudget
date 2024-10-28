@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import './LoginPage.css';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -15,10 +16,7 @@ function LoginPage() {
         password,
       });
 
-      // Store the username in local storage or state
       localStorage.setItem('username', response.data.username);
-
-      // Navigate to the user's home page
       setMessage(response.data.message);
       navigate('/user-home');
     } catch (error) {
@@ -27,24 +25,44 @@ function LoginPage() {
   };
 
   return (
-    <div>
-      <h1>Login Page</h1>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <br />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br />
-      <button onClick={handleLogin}>Login</button>
-      <p>{message}</p>
+    <div className="login-page">
+      <div className="top-bar">
+        <div className="logo-container">
+          <img src="logo.png" alt="Logo" className="logo" />
+        </div>
+        <button className="home-button" onClick={() => navigate('/')}>
+          Home
+        </button>
+      </div>
+
+      <div className="main-content">
+        <h1 className="sign-in-title">Sign In</h1>
+        
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="input-field"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="input-field"
+        />
+
+        <button className="sign-in-button" onClick={handleLogin}>
+          Sign In
+        </button>
+        
+        <p className="message">{message}</p>
+        
+        <p className="signup-text">
+          Don't have an account? <Link to="/register" className="signup-link">Sign up</Link>
+        </p>
+      </div>
     </div>
   );
 }

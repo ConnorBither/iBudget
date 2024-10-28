@@ -20,24 +20,24 @@ app.use(bodyParser.json());
 
 // Register Endpoint
 app.post('/register', async (req, res) => {
-  const { username, password } = req.body;
+  const { username, email, password, monthlyIncome } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).send('Username and password are required');
+  if (!username || !email || !password || !monthlyIncome) {
+    return res.status(400).send('All fields are required');
   }
 
-  // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const params = {
     TableName: 'Users',
     Item: {
       username: username,
+      email: email,
       passwordHash: hashedPassword,
+      monthlyIncome: monthlyIncome,
     },
   };
 
-  // Save user to DynamoDB
   try {
     await dynamoDB.put(params).promise();
     res.status(201).send('User registered successfully');
@@ -46,6 +46,7 @@ app.post('/register', async (req, res) => {
     res.status(500).send('Error registering user');
   }
 });
+
 
 // Login Endpoint
 app.post('/login', async (req, res) => {
