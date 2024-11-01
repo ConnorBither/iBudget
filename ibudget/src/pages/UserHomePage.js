@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import './LoginPage.css'; // Reuse the same CSS for styling consistency
 
 function UserHomePage() {
   const [username, setUsername] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Retrieve the username from localStorage (assuming it's stored there after login)
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
       setUsername(storedUsername);
@@ -13,27 +14,35 @@ function UserHomePage() {
   }, []);
 
   return (
-    <div>
-      <h1>Welcome, {username}</h1>  {/* Personalized welcome message */}
-      <div>
-        <Link to="/enter-purchases">
-          <button>Enter New Purchases</button>
-        </Link>
+    <div className="login-page">
+      {/* Top Bar */}
+      <div className="top-bar">
+        <div className="logo-container">
+          <img src="logo.png" alt="Logo" className="logo" />
+        </div>
+        <button className="home-button" onClick={() => navigate('/')}>
+          Home
+        </button>
       </div>
-      <div>
-        <Link to="/review-purchases">
-          <button>Review Purchases</button>
-        </Link>
-      </div>
-      <div>
-        <Link to="/recommendations">
-          <button>See Personalized Recommendations</button>
-        </Link>
-      </div>
-      <div>
-        <Link to="/settings">
-          <button>Settings</button>
-        </Link>
+
+      {/* Main Content */}
+      <div className="main-content">
+        <h1 className="welcome-message">Welcome, {username}</h1>
+        
+        <div className="button-container">
+          <Link to="/enter-purchases">
+            <button className="home-action-button">Enter New Purchases</button>
+          </Link>
+          <Link to="/review-purchases">
+            <button className="home-action-button">Review Purchases</button>
+          </Link>
+          <Link to="/recommendations">
+            <button className="home-action-button">See Personalized Recommendations</button>
+          </Link>
+          <Link to="/settings">
+            <button className="home-action-button">Settings</button>
+          </Link>
+        </div>
       </div>
     </div>
   );

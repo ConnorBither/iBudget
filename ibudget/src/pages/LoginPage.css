@@ -81,3 +81,31 @@
   .signup-link:hover {
     text-decoration: underline;
   }
+
+  .welcome-message {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+  
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .home-action-button {
+    width: 200px;
+    padding: 10px;
+    background-color: #007BFF; /* Button background color */
+    color: black;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .home-action-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
