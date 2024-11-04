@@ -1,5 +1,30 @@
-.login-button {
+.home-page {
+  background-color: #ccc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+  .welcome-title {
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  .main {
+    background-color: white;
+    background-image: url(/src/pages/line.png);
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 85vh;
+    padding: 20px;
+  }
+
+  .login-button {
     display: inline-block;
+    width: 200px;
     padding: 10px 20px;
     font-size: 16px;
     color: white;
@@ -14,4 +39,3 @@
   .login-button:hover {
     background-color: #0056b3;
   }
-  
