@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './NewPurchases.css';
 
 function NewPurchases() {
   const [storeName, setStoreName] = useState('');
@@ -41,32 +42,28 @@ function NewPurchases() {
   };
 
   return (
-    <div>
+    <div className="back">
+    <div className="new-purchase-page">
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Store Name: </label>
-          <input type="text" value={storeName} onChange={(e) => setStoreName(e.target.value)} placeholder="Enter store name" />
+          <input type="text" value={storeName} onChange={(e) => setStoreName(e.target.value)} placeholder="Enter store name" className="input-field" />
         </div>
         <div>
-          <label>Item Name: </label>
-          <input type="text" value={itemName} onChange={(e) => setItemName(e.target.value)} placeholder="Enter item name" />
+          <input type="text" value={itemName} onChange={(e) => setItemName(e.target.value)} placeholder="Enter item name" className="input-field" />
         </div>
         <div>
-          <label>Price: </label>
-          <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Enter price" />
+          <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Enter price" className="input-field" />
         </div>
         <div>
-          <label>Quantity: </label>
-          <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="Enter quantity" />
+          <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="Enter quantity" className="input-field" />
         </div>
         <div>
-          <label>Category: </label>
-          <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Enter category" />
+          <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Enter category" className="input-field" />
         </div>
-        <br />
-        <button type="submit">Submit Purchase</button>
+        <button type="submit" className="action-button">Submit Purchase</button>
       </form>
       <p>{message}</p>
+    </div>
     </div>
   );
 }
