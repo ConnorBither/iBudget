@@ -122,6 +122,83 @@ app.post('/add-purchase', async (req, res) => {
   }
 });
 
+// Endpoint to get user data
+app.get('/user-data', async (req, res) => {
+  const { username } = req.query;
+
+  if (!username) {
+    return res.status(400).send('Username is required');
+  }
+
+  const params = {
+    TableName: 'Users',
+    Key: {
+      username: username,
+    },
+  };
+
+  try {
+    const result = await dynamoDB.get(params).promise();
+    if (!result.Item) {
+      return res.status(404).send('User not found');
+    }
+
+    res.status(200).send({
+      email: result.Item.email,
+      monthlyIncome: result.Item.monthlyIncome,
+    });
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).send('Error fetching user data');
+  }
+});
+
+// Endpoint to update user data
+app.put('/update-user', async (req, res) => {
+  const { username, email, monthlyIncome, newPassword } = req.body;
+
+  if (!username || (!email && !monthlyIncome && !newPassword)) {
+    return res.status(400).send('Insufficient data to update');
+  }
+
+  let updateExpression = 'set';
+  const expressionAttributeValues = {};
+  if (email) {
+    updateExpression += ' email = :email,';
+    expressionAttributeValues[':email'] = email;
+  }
+  if (monthlyIncome) {
+    updateExpression += ' monthlyIncome = :monthlyIncome,';
+    expressionAttributeValues[':monthlyIncome'] = monthlyIncome;
+  }
+  if (newPassword) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    updateExpression += ' passwordHash = :passwordHash,';
+    expressionAttributeValues[':passwordHash'] = hashedPassword;
+  }
+
+  // Remove trailing comma from update expression
+  updateExpression = updateExpression.slice(0, -1);
+
+  const params = {
+    TableName: 'Users',
+    Key: {
+      username: username,
+    },
+    UpdateExpression: updateExpression,
+    ExpressionAttributeValues: expressionAttributeValues,
+  };
+
+  try {
+    await dynamoDB.update(params).promise();
+    res.status(200).send('User data updated successfully');
+  } catch (error) {
+    console.error('Error updating user data:', error);
+    res.status(500).send('Error updating user data');
+  }
+});
+
+
 // Retrieve purchases for user with pagination
 app.get('/purchases', async (req, res) => {
   const { username, limit = 100, lastKey } = req.query;
