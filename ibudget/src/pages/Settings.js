@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './LoginPage.css';
 
-function Settings({ username }) {
+function Settings() {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [monthlyIncome, setMonthlyIncome] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -10,12 +10,22 @@ function Settings({ username }) {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
+    //fetch username from local storage
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    } else {
+      setMessage('No username found. Please log in.');
+      return;
+    }
     // Fetch current user data on component mount
     const fetchUserData = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/user-data?username=${username}`);
+        console.log("Fetched user data:", response.data); // Check if data is received
         setEmail(response.data.email);
         setMonthlyIncome(response.data.monthlyIncome);
+        setMessage(''); // Clear any previous error messages
       } catch (error) {
         console.error('Error fetching user data:', error);
         setMessage('Failed to load user data');

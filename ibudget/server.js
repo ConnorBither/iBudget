@@ -180,6 +180,10 @@ app.put('/update-user', async (req, res) => {
   // Remove trailing comma from update expression
   updateExpression = updateExpression.slice(0, -1);
 
+  if (Object.keys(expressionAttributeValues).length === 0) {
+    return res.status(400).send('No valid fields to update');
+  }
+
   const params = {
     TableName: 'Users',
     Key: {
