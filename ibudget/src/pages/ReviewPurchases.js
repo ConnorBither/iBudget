@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import './LoginPage.css'; // Reuse the same CSS for consistent styling
 
@@ -7,9 +7,9 @@ function ReviewPurchases() {
   const [lastKey, setLastKey] = useState(null);
   const [message, setMessage] = useState('');
 
-  const username = localStorage.getItem('username'); // Assuming username is stored in local storage
+  const username = localStorage.getItem('username'); // username is stored in local storage
 
-  const fetchPurchases = async () => {
+  const fetchPurchases = useCallback(async (append = false) => {
     try {
       const response = await axios.get('http://localhost:5000/purchases', {
         params: {
@@ -17,16 +17,20 @@ function ReviewPurchases() {
           lastKey,
         },
       });
-      setPurchases((prevPurchases) => [...prevPurchases, ...response.data.purchases]);
+      
+      // Update purchases without duplicating entries
+      setPurchases((prevPurchases) =>
+        append ? [...prevPurchases, ...response.data.purchases] : response.data.purchases
+      );
       setLastKey(response.data.lastKey);
     } catch (error) {
       setMessage('Error fetching purchases');
     }
-  };
+  }, [username, lastKey]);
 
   useEffect(() => {
-    fetchPurchases();
-  }, []);
+    fetchPurchases(); // Initial load
+  }, [fetchPurchases]);
 
   return (
     <div className="login-page">
@@ -56,7 +60,7 @@ function ReviewPurchases() {
           )}
         </ul>
         {lastKey && (
-          <button className="home-action-button" onClick={fetchPurchases}>
+          <button className="home-action-button" onClick={() => fetchPurchases(true)}>
             Load More
           </button>
         )}
@@ -66,3 +70,4 @@ function ReviewPurchases() {
 }
 
 export default ReviewPurchases;
+
