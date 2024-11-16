@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
+import './LoginPage.css';
 
 function Settings() {
   const [username, setUsername] = useState('');
@@ -8,6 +10,7 @@ function Settings() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     //fetch username from local storage
@@ -60,7 +63,9 @@ function Settings() {
         <div className="logo-container">
           <img src="logo.png" alt="Logo" className="logo" />
         </div>
-        <button className="home-button">Home</button>
+        <button className="home-button" onClick={() => navigate('/')}>
+          Home
+          </button>
       </div>
 
       <div className="main-content">
