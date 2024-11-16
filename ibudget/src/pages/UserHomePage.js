@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css'; // Reuse the same CSS for styling consistency
+import logo from './logo.png';
 
 function UserHomePage() {
   const [username, setUsername] = useState('');
@@ -18,7 +19,7 @@ function UserHomePage() {
       {/* Top Bar */}
       <div className="top-bar">
         <div className="logo-container">
-          <img src="logo.png" alt="Logo" className="logo" />
+          <img src={logo} alt="Logo" className="logo" />
         </div>
         <button className="home-button" onClick={() => navigate('/')}>
           Home
