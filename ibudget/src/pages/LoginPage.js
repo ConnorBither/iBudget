@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './LoginPage.css';
+import logo from './logo.png';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -28,7 +29,7 @@ function LoginPage() {
     <div className="login-page">
       <div className="top-bar">
         <div className="logo-container">
-          <img src="logo.png" alt="Logo" className="logo" />
+          <img src={logo} alt="Logo" className="logo" />
         </div>
         <button className="home-button" onClick={() => navigate('/')}>
           Home

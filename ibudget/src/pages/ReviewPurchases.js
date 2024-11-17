@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import './LoginPage.css'; // Reuse the same CSS for consistent styling
+import logo from './logo.png';
 
 function ReviewPurchases() {
   const [purchases, setPurchases] = useState([]);
@@ -37,7 +38,7 @@ function ReviewPurchases() {
       {/* Top Bar */}
       <div className="top-bar">
         <div className="logo-container">
-          <img src="logo.png" alt="Logo" className="logo" />
+          <img src={logo} alt="Logo" className="logo" />
         </div>
         <button className="home-button" onClick={() => window.location.href = '/'}>
           Home

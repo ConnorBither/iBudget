@@ -15,6 +15,7 @@
   
   .logo-container .logo {
     height: 30px;
+    object-fit: cover;
   }
   
   .home-button {
