@@ -1,46 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './LoginPage.css'; // Reusing the existing CSS for consistency
-import './Calendar.css'; // Custom CSS for the calendar
-import Calendar from './Calendar.js';
-import { Link, useNavigate } from 'react-router-dom';
+import './Recommendations.css'; // Custom CSS for additional styling
+import logo from './logo.png';
 
 function Recommendations() {
-  const [view, setView] = useState('weekly'); // State for toggling calendar views
-  const navigate = useNavigate();
+  const recommendations = [
+    "Cut down on dining out to save $50 per month.",
+    "Switch to a cheaper phone plan to save $20 per month.",
+    "Set aside $200 for an emergency fund this month.",
+  ]; // Sample recommendations will be changed by ai model, this is temp
+
   return (
     <div className="login-page">
       {/* Top Bar */}
       <div className="top-bar">
         <div className="logo-container">
-          <img src="logo.png" alt="Logo" className="logo" />
+        <img src={logo} alt="Logo" className="logo" />
         </div>
-        <button className="home-button" onClick={() => navigate('/')}>
-          Home
-        </button>
+        <button className="home-button">Home</button>
       </div>
 
       {/* Main Content */}
       <div className="main-content">
         <h1 className="sign-in-title">Your Budgeting Recommendations</h1>
 
-        {/* Calendar View Toggle */}
-        <div className="calendar-toggle">
-          <button
-            className={`toggle-button ${view === 'weekly' ? 'active' : ''}`}
-            onClick={() => setView('weekly')}
-          >
-            Weekly View
-          </button>
-          <button
-            className={`toggle-button ${view === 'monthly' ? 'active' : ''}`}
-            onClick={() => setView('monthly')}
-          >
-            Monthly View
-          </button>
+        <div className="recommendations-container">
+          {recommendations.map((rec, index) => (
+            <div className="recommendation-card" key={index}>
+              <p>{rec}</p>
+            </div>
+          ))}
         </div>
-
-        {/* Calendar Component */}
-        <Calendar view={view} />
       </div>
     </div>
   );
