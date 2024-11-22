@@ -43,14 +43,6 @@ function NewPurchases() {
   };
 
   return (
-    <div className="login-page">
-    <div className="top-bar">
-      <div className="logo-container">
-        <img src={logo} alt="Logo" className="logo" />
-      </div>
-      <button className="home-button">Home</button>
-    </div>
-
     <div className="main-content">
     <h1 className="sign-in-title">New Purchase</h1>
       <form onSubmit={handleSubmit}>
