@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './NewPurchases.css';
+import './LoginPage.css';
+import logo from './logo.png';
 
 function NewPurchases() {
   const [storeName, setStoreName] = useState('');
@@ -42,8 +43,16 @@ function NewPurchases() {
   };
 
   return (
-    <div className="back">
-    <div className="new-purchase-page">
+    <div className="login-page">
+    <div className="top-bar">
+      <div className="logo-container">
+        <img src={logo} alt="Logo" className="logo" />
+      </div>
+      <button className="home-button">Home</button>
+    </div>
+
+    <div className="main-content">
+    <h1 className="sign-in-title">New Purchase</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <input type="text" value={storeName} onChange={(e) => setStoreName(e.target.value)} placeholder="Enter store name" className="input-field" />
@@ -60,7 +69,7 @@ function NewPurchases() {
         <div>
           <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Enter category" className="input-field" />
         </div>
-        <button type="submit" className="action-button">Submit Purchase</button>
+        <button type="submit" className="purch-action-button">Submit Purchase</button>
       </form>
       <p>{message}</p>
     </div>
