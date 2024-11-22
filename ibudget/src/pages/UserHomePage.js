@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css'; // Reuse the same CSS for styling consistency
 import logo from './logo.png';
+import NavBar from './NavBar';
 
 function UserHomePage() {
   const [username, setUsername] = useState('');
@@ -17,14 +18,7 @@ function UserHomePage() {
   return (
     <div className="login-page">
       {/* Top Bar */}
-      <div className="top-bar">
-        <div className="logo-container">
-          <img src={logo} alt="Logo" className="logo" />
-        </div>
-        <button className="home-button" onClick={() => navigate('/')}>
-          Home
-        </button>
-      </div>
+      <NavBar />
 
       {/* Main Content */}
       <div className="main-content">

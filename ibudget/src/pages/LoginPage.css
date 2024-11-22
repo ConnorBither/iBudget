@@ -110,3 +110,9 @@
   .home-action-button:hover {
     background-color: #0056b3; /* Darker blue on hover */
   }
+
+
+  /* Enter Purchases Page */
+  .page-title {
+    text-align: center;
+  }
