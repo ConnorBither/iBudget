@@ -43,6 +43,7 @@ function NewPurchases() {
   };
 
   return (
+    <div className="login-page'>
     <div className="main-content">
     <h1 className="sign-in-title">New Purchase</h1>
       <form onSubmit={handleSubmit}>
