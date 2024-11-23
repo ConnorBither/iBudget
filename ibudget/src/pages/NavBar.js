@@ -10,7 +10,7 @@ function NavBar() {
             <div className="logo-container">
                 <img src={logo} alt="Logo" className="logo" />
             </div>
-            <button className="home-button" onClick={() => navigate('/')}>
+            <button className="home-button" onClick={() => navigate('/user-home')}>
                 Home
             </button>
         </div>
