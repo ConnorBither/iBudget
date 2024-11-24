@@ -28,13 +28,17 @@ app.post('/register', async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
+  // Generate a unique customerID (e.g., timestamp-based)
+  const customerID = Math.floor(Math.random() * 1000000); // Example: Random 6-digit number
+
   const params = {
     TableName: 'Users',
     Item: {
-      username: username,
-      email: email,
+      username,
+      email,
       passwordHash: hashedPassword,
-      monthlyIncome: monthlyIncome,
+      monthlyIncome,
+      customerID,
     },
   };
 
@@ -92,35 +96,83 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/add-purchase', async (req, res) => {
-  const { username, storeName, itemName, price, quantity, category } = req.body;
+  const {
+    username,
+    storeName,
+    itemName,
+    price,
+    quantity,
+    category,
+    paymentMethod,
+    transactionDate,
+    storeLocation,
+    discount,
+  } = req.body;
 
-  if (!username || !storeName || !itemName || !price || !quantity || !category) {
+  if (
+    !username ||
+    !storeName ||
+    !itemName ||
+    !price ||
+    !quantity ||
+    !category ||
+    !paymentMethod ||
+    !transactionDate ||
+    !storeLocation ||
+    discount === undefined
+  ) {
+    console.error('Validation error: Missing fields', req.body);
     return res.status(400).send('All fields are required');
   }
 
-  const params = {
-    TableName: 'Purchases',
-    Item: {
-      purchaseId: new Date().getTime().toString(),  // Unique ID for each purchase
-      username: username,
-      storeName: storeName,
-      itemName: itemName,
-      price: price,
-      quantity: quantity,
-      category: category,
-      purchaseDate: new Date().toISOString(),
-    },
+  // Fetch the customerID from the Users table
+  const userParams = {
+    TableName: 'Users',
+    Key: { username },
   };
 
-  // Save purchase to DynamoDB
   try {
-    await dynamoDB.put(params).promise();
+    const userResult = await dynamoDB.get(userParams).promise();
+
+    if (!userResult.Item || !userResult.Item.customerID) {
+      console.error('User not found or missing customerID:', username);
+      return res.status(404).send('User not found or missing customerID');
+    }
+
+    const customerID = userResult.Item.customerID;
+
+    // Prepare the purchase item
+    const totalAmount = parseFloat(price) * parseInt(quantity);
+    const purchaseId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+    const purchaseParams = {
+      TableName: 'Purchases',
+      Item: {
+        purchaseId,
+        username,
+        customerID, // Add customerID to purchase record
+        itemName,
+        storeName,
+        price: parseFloat(price),
+        quantity: parseInt(quantity),
+        category,
+        paymentMethod,
+        transactionDate,
+        storeLocation,
+        discount: parseFloat(discount),
+        totalAmount,
+      },
+    };
+
+    await dynamoDB.put(purchaseParams).promise();
+    console.log('Purchase successfully added:', purchaseParams.Item);
     res.status(201).send('Purchase added successfully');
   } catch (error) {
-    console.error('Error adding purchase:', error);
+    console.error('Error adding purchase:', error.stack || error);
     res.status(500).send('Error adding purchase');
   }
 });
+
 
 // Endpoint to get user data
 app.get('/user-data', async (req, res) => {
