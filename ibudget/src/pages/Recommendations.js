@@ -2,6 +2,7 @@ import React from 'react';
 import './LoginPage.css'; // Reusing the existing CSS for consistency
 import './Recommendations.css'; // Custom CSS for additional styling
 import logo from './logo.png';
+import NavBar from './NavBar';
 
 function Recommendations() {
   const recommendations = [
@@ -13,12 +14,7 @@ function Recommendations() {
   return (
     <div className="login-page">
       {/* Top Bar */}
-      <div className="top-bar">
-        <div className="logo-container">
-        <img src={logo} alt="Logo" className="logo" />
-        </div>
-        <button className="home-button">Home</button>
-      </div>
+      <NavBar />
 
       {/* Main Content */}
       <div className="main-content">

@@ -110,3 +110,21 @@
   .home-action-button:hover {
     background-color: #0056b3; /* Darker blue on hover */
   }
+
+
+  /* Enter Purchases Page */
+  .page-title {
+    text-align: center;
+  }
+
+  .purch-action-button {
+    margin-top: 30px;
+    width: 325px;
+    background-color: #007bff;
+    color: black;
+    padding: 10px 40px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
