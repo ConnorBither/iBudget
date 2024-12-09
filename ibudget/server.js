@@ -285,6 +285,72 @@ app.get('/purchases', async (req, res) => {
   }
 });
 
+
+//Endpoint for Recommendations
+app.get('/recommendations', async (req, res) => {
+  const { username } = req.query;
+
+  if (!username) {
+    console.error('Username is required');
+    return res.status(400).send('Username is required');
+  }
+
+  try {
+    // Fetch the customerID from the Users table
+    const userParams = {
+      TableName: 'Users',
+      Key: { username },
+    };
+
+    const userResult = await dynamoDB.get(userParams).promise();
+    console.log('User query result:', userResult);
+
+    if (!userResult.Item || typeof userResult.Item.customerID !== 'number') {
+      console.error('User not found or missing numeric customerID:', username);
+      return res.status(404).send('User not found or missing valid customerID');
+    }
+
+    const customerID = userResult.Item.customerID;
+    console.log('Retrieved customerID:', customerID);
+
+    // Fetch recommendations from the Recommendations table
+    const recommendationsParams = {
+      TableName: 'Recommendations',
+      KeyConditionExpression: 'customerID = :customerID',
+      ExpressionAttributeValues: {
+        ':customerID': customerID,
+      },
+    };
+
+    const recommendationsResult = await dynamoDB.query(recommendationsParams).promise();
+    console.log('Recommendations query result:', recommendationsResult);
+
+    if (!recommendationsResult.Items || recommendationsResult.Items.length === 0) {
+      console.error('No recommendations found for customerID:', customerID);
+      return res.status(404).send('No recommendations found for this user');
+    }
+
+    // Parse the recommendation field
+    const recommendations = recommendationsResult.Items.map(item => {
+      try {
+        // Fix invalid JSON by replacing single quotes with double quotes
+        const correctedJSON = item.recommendation.replace(/'/g, '"');
+        return JSON.parse(correctedJSON);
+      } catch (parseError) {
+        console.warn('Failed to parse recommendation:', item.recommendation);
+        return null;
+      }
+    }).filter(Boolean);
+
+    console.log('Parsed recommendations:', recommendations);
+    res.status(200).send({ recommendations });
+  } catch (error) {
+    console.error('Error fetching recommendations:', error);
+    res.status(500).send('Error fetching recommendations');
+  }
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
