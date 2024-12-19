@@ -63,6 +63,11 @@ function Recommendations() {
         ) : (
           <p>Loading recommendations...</p>
         )}
+        <div className="note">
+        <p>
+          The AI model updates every 24 hours. Please check tomorrow to see newly entered purchases reflected.
+        </p>
+        </div>
       </div>
     </div>
   );

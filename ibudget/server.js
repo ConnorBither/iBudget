@@ -18,6 +18,30 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient();
 app.use(cors());
 app.use(bodyParser.json());
 
+// Function to generate a 7-digit or higher random number
+const generateRandomCustomerID = () => {
+  return Math.floor(1000000 + Math.random() * 9000000); // Ensures a 7-digit number
+};
+
+// Function to check if customerID already exists
+const isCustomerIDUnique = async (customerID) => {
+  const params = {
+    TableName: 'Users',
+    FilterExpression: 'customerID = :id',
+    ExpressionAttributeValues: {
+      ':id': customerID,
+    },
+  };
+
+  try {
+    const data = await dynamoDB.scan(params).promise();
+    return data.Items.length === 0; // Unique if no matching items are found
+  } catch (error) {
+    console.error('Error checking customerID uniqueness:', error);
+    throw new Error('Database scan failed');
+  }
+};
+
 // Register Endpoint
 app.post('/register', async (req, res) => {
   const { username, email, password, monthlyIncome } = req.body;
@@ -28,8 +52,13 @@ app.post('/register', async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Generate a unique customerID (e.g., timestamp-based)
-  const customerID = Math.floor(Math.random() * 1000000); // Example: Random 6-digit number
+  // Generate a unique customerID
+  let customerID;
+  let isUnique = false;
+  do {
+    customerID = generateRandomCustomerID();
+    isUnique = await isCustomerIDUnique(customerID);
+  } while (!isUnique);
 
   const params = {
     TableName: 'Users',
