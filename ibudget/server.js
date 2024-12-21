@@ -315,7 +315,7 @@ app.get('/purchases', async (req, res) => {
 });
 
 
-//Endpoint for Recommendations
+//endpoint for recomendations
 app.get('/recommendations', async (req, res) => {
   const { username } = req.query;
 
@@ -359,17 +359,45 @@ app.get('/recommendations', async (req, res) => {
       return res.status(404).send('No recommendations found for this user');
     }
 
-    // Parse the recommendation field
+    // Parse the recommendations field
     const recommendations = recommendationsResult.Items.map(item => {
       try {
-        // Fix invalid JSON by replacing single quotes with double quotes
-        const correctedJSON = item.recommendation.replace(/'/g, '"');
-        return JSON.parse(correctedJSON);
+        let recommendationString = item.recommendations;
+    
+        // Fix unquoted keys and strings
+        recommendationString = recommendationString
+          .replace(/([{,])(\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*):/g, '$1"$3":') // Quote keys
+          .replace(/: ([^"\[\]\{\}]+?)([,}])/g, ': "$1"$2') // Quote unquoted string values
+          .replace(/\[([^"\]]+)\]/g, (_, match) => {
+            const formattedArray = match
+              .split(',')
+              .map(item => `"${item.trim()}"`)
+              .join(', ');
+            return `[${formattedArray}]`;
+          });
+    
+        const parsed = JSON.parse(recommendationString);
+    
+        // Ensure numeric fields are numbers
+        const spending_limit = parseFloat(parsed.spending_limit);
+        const saving_goal = parseFloat(parsed.saving_goal);
+    
+        // Ensure tips is an array
+        const tips = Array.isArray(parsed.custom_tips) ? parsed.custom_tips : [];
+    
+        return {
+          ...parsed,
+          spending_limit,
+          saving_goal,
+          tips,
+        };
       } catch (parseError) {
-        console.warn('Failed to parse recommendation:', item.recommendation);
+        console.warn('Failed to parse recommendations:', item.recommendations);
+        console.log('Parse error:', parseError);
         return null;
       }
     }).filter(Boolean);
+    
 
     console.log('Parsed recommendations:', recommendations);
     res.status(200).send({ recommendations });
