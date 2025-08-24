@@ -44,9 +44,6 @@ Default region name: us-west-2
 
 Default output format: json
 
-For the Professor, we have submitted a separate txt file with an aws password and login to canvas. If there are any problems, you can contact us using any of these.
-john.bither@csu.fullerton.edu 
-
 connor.bither@gmail.com 
 
 (562)584-2278
